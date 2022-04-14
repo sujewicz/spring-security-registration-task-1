@@ -95,4 +95,30 @@ public class GetLoggedUsersIntegrationTest {
         assertTrue(response.body().asString().contains("test@test.com"));
     }
 
+    @Test
+    public void givenLoggedInManager_whenGettingLoggedUsersFromActiveUserStore_thenResponseContainsManager() {
+        final RequestSpecification request = RestAssured.given().auth().form("test_manager@test.com", "test_manager", formConfig);
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("password", "test_manager");
+
+        final Response response = request.with().params(params).get(LOGGED_USERS_URL);
+
+        assertEquals(200, response.statusCode());
+        assertTrue(response.body().asString().contains("test_manager@test.com"));
+    }
+
+    @Test
+    public void givenLoggedInManager_whenGettingLoggedUsersFromSessionRegistry_thenResponseContainsManager() {
+        final RequestSpecification request = RestAssured.given().auth().form("test_manager@test.com", "test_manager", formConfig);
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("password", "test_manager");
+
+        final Response response = request.with().params(params).get(SESSION_REGISTRY_LOGGED_USERS_URL);
+
+        assertEquals(200, response.statusCode());
+        assertTrue(response.body().asString().contains("test_manager@test.com"));
+    }
+
 }
